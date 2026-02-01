@@ -1,28 +1,3 @@
-// function openModal(id) {
-//     const targetModal = document.getElementById(id);
-//     if (targetModal) {
-//         targetModal.classList.add('active');
-//         document.body.classList.add('modal-open');
-//     }
-// }
-
-// function closeModal(id) {
-//     const targetModal = document.getElementById(id);
-//     if (targetModal) {
-//         targetModal.classList.remove('active');
-        
-//         if (!document.querySelector('.modal.active')) {
-//             document.body.classList.remove('modal-open');
-//         }
-
-//         const iframe = targetModal.querySelector('iframe');
-//         if (iframe) {
-//             const src = iframe.src;
-//             iframe.src = src;
-//         }
-//     }
-// }
-
 async function changeLanguage(lang) {
     try {
         const response = await fetch('lang.json');
@@ -91,10 +66,8 @@ function downloadCV() {
     window.scrollTo(0, 0);
     
     const element = document.querySelector('.cv-wrapper');
-    // Gizlenecek butonlar ve sarmalayıcılar
     const buttons = document.querySelectorAll('.lang-switch-btn, .theme-btn, .download-section, .language-wrapper, .theme-wrapper');
     
-    // PDF üretilirken butonları tamamen kaldır
     buttons.forEach(btn => btn.style.display = 'none');
 
 const opt = {
@@ -105,19 +78,17 @@ const opt = {
         scale: 2, 
         useCORS: true,
         scrollY: 0,
-        letterRendering: true // Metinlerin kaymasını ve taşmasını önler
+        letterRendering: true
     },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    // 'avoid' modu elemanların bölünmesini engellerken taşmayı da minimize eder
     pagebreak: { 
         mode: ['css', 'legacy'], 
         before: '.html2pdf__page-break',
-        avoid: ['section', 'h2', '.item'] // Bu etiketlerin sayfa sonunda bölünmesini önlemeye çalışır
+        avoid: ['section', 'h2', '.item']
     }
 };
 
     html2pdf().set(opt).from(element).save().then(() => {
-        // İşlem bitince butonları geri getir
         const lang = localStorage.getItem('selectedLang') || 'tr';
         buttons.forEach(btn => {
             if (btn.id === 'btn-en' && lang === 'en') btn.style.display = 'none';
