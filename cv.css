@@ -510,7 +510,7 @@ body {
     text-decoration: underline;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     body {
         padding: 0;
         background-color: #ffffff;
@@ -525,9 +525,6 @@ body {
         padding: 0;
     }
 
-    .profile-photo-desktop {
-        display: none;
-    }
     .cv-mobile-photo-section {
         display: block;
         width: 100%;
@@ -793,47 +790,95 @@ body.modal-open {
     text-transform: uppercase;
 }
 
-@media print {
-    html, body {
-        height: auto !important;
-        min-height: initial !important;
-        overflow: visible !important;
-        background: white !important;
-    }
-
-    .cv-wrapper {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        transform: none !important;
-        position: relative !important;
-    }
-
-    /* PDF'de gereksiz butonları gizle */
-    .language-wrapper, 
-    .theme-wrapper, 
-    .download-section, 
-    .lang-download-btn,
-    .modal {
-        display: none !important;
-    }
-
-    .cv-sidebar {
-        background-color: #f7f7f7 !important;
-        border-right: 1px solid #e0e0e0 !important;
-    }
-
-    .cv-content, p, li, h1, h2, h3 {
-        color: #000 !important;
-    }
-
-    section {
-        page-break-inside: avoid;
-    }
-}
 
 .lang-download-btn 
     {
         padding: 10px 20px; border-radius: 20px; cursor: pointer; background: var(--accent-color-1); color: white; border: none;
     }
+/* 1. GENEL SIDEBAR AYARLARI (Boşlukları kıstık) */
+.cv-sidebar section {
+    margin-bottom: 20px; /* 30px'den düşürüldü */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+/* 2. QR KOD AYARLARI (Boyutu küçülttük) */
+.single-qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px auto;
+    max-width: 100px; /* 120px'den düşürüldü */
+}
+
+.single-qr-container img {
+    width: 100% !important;
+    height: auto;
+    border: 2px solid var(--accent-color-1);
+    padding: 5px; /* İç boşluk azaltıldı */
+    border-radius: 10px;
+}
+
+.qr-hint {
+    margin-top: 5px;
+    font-size: 8px; /* Yazı küçültüldü */
+    color: var(--light-text-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* 3. MOBİL GÖRÜNÜM (Taşmayı önleyen asıl kısım) */
+@media (max-width: 768px) {
+    body {
+        line-height: 1.4; /* Satır aralığı daraltıldı */
+    }
+
+    .cv-header {
+        padding: 20px 15px; /* Header yüksekliği azaltıldı */
+    }
+
+    .cv-header h1 {
+        font-size: 2.0em;
+    }
+
+    .cv-content, .cv-sidebar {
+        padding: 15px 10px; /* İç boşluklar daraltıldı */
+    }
+
+    .cv-content section, .cv-sidebar section {
+        margin-bottom: 12px; /* Bölümler arası boşluk azaldı */
+    }
+
+    .about-me p, .cv-content .item p, .cv-content ul li {
+        font-size: 0.87rem !important; /* Yazılar hafif küçüldü */
+    }
+
+    .single-qr-container {
+        max-width: 90px; /* Mobilde ve PDF'te daha az yer kaplar */
+        margin-top: 5px;
+    }
+}
+
+@media print {
+    /* Yazı boyutlarını ve satır aralıklarını cihazdan bağımsız hale getirelim */
+    html, body {
+        font-size: 12pt !important; /* Standart punto */
+        -webkit-print-color-adjust: exact; /* Renklerin kaybolmasını önler */
+    }
+
+    .cv-sidebar {
+        width: 65mm !important; /* Genişliği mm (milimetre) olarak sabitlemek her cihazda aynı sonucu verir */
+        min-width: 65mm !important;
+    }
+
+    .cv-content {
+        width: 145mm !important; /* A4 genişliği ~210mm'dir. 65+145=210mm tam oturur. */
+    }
+
+    .single-qr-container img {
+        width: 25mm !important; /* QR kodu 2.5 cm olarak sabitledik */
+        height: 25mm !important;
+    }
+}

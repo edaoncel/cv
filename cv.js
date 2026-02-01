@@ -1,27 +1,27 @@
-function openModal(id) {
-    const targetModal = document.getElementById(id);
-    if (targetModal) {
-        targetModal.classList.add('active');
-        document.body.classList.add('modal-open');
-    }
-}
+// function openModal(id) {
+//     const targetModal = document.getElementById(id);
+//     if (targetModal) {
+//         targetModal.classList.add('active');
+//         document.body.classList.add('modal-open');
+//     }
+// }
 
-function closeModal(id) {
-    const targetModal = document.getElementById(id);
-    if (targetModal) {
-        targetModal.classList.remove('active');
+// function closeModal(id) {
+//     const targetModal = document.getElementById(id);
+//     if (targetModal) {
+//         targetModal.classList.remove('active');
         
-        if (!document.querySelector('.modal.active')) {
-            document.body.classList.remove('modal-open');
-        }
+//         if (!document.querySelector('.modal.active')) {
+//             document.body.classList.remove('modal-open');
+//         }
 
-        const iframe = targetModal.querySelector('iframe');
-        if (iframe) {
-            const src = iframe.src;
-            iframe.src = src;
-        }
-    }
-}
+//         const iframe = targetModal.querySelector('iframe');
+//         if (iframe) {
+//             const src = iframe.src;
+//             iframe.src = src;
+//         }
+//     }
+// }
 
 async function changeLanguage(lang) {
     try {
@@ -78,20 +78,6 @@ async function changeLanguage(lang) {
     } catch (e) { console.error("Dil yükleme hatası:", e); }
 }
 
-function toggleDarkMode() {
-    const body = document.body;
-    const icon = document.getElementById('theme-icon');
-    
-    body.classList.toggle('dark-mode');
-    
-    if (body.classList.contains('dark-mode')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        icon.classList.replace('fa-sun', 'fa-moon');
-        localStorage.setItem('theme', 'light');
-    }
-}
 
 window.onload = () => {
     const savedTheme = localStorage.getItem('theme');
@@ -103,26 +89,44 @@ window.onload = () => {
 
 function downloadCV() {
     window.scrollTo(0, 0);
-
-    const element = document.querySelector('.cv-wrapper');
     
-    const opt = {
-        margin: 0,
-        filename: 'Eda_Oncel_CV.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            scrollY: 0, 
-            windowWidth: document.documentElement.offsetWidth,
-            letterRendering: true
-        },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
+    const element = document.querySelector('.cv-wrapper');
+    // Gizlenecek butonlar ve sarmalayıcılar
+    const buttons = document.querySelectorAll('.lang-switch-btn, .theme-btn, .download-section, .language-wrapper, .theme-wrapper');
+    
+    // PDF üretilirken butonları tamamen kaldır
+    buttons.forEach(btn => btn.style.display = 'none');
 
-    html2pdf().set(opt).from(element).save();
+const opt = {
+    margin: 0,
+    filename: 'Eda_Oncel_CV.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        scrollY: 0,
+        letterRendering: true // Metinlerin kaymasını ve taşmasını önler
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    // 'avoid' modu elemanların bölünmesini engellerken taşmayı da minimize eder
+    pagebreak: { 
+        mode: ['css', 'legacy'], 
+        before: '.html2pdf__page-break',
+        avoid: ['section', 'h2', '.item'] // Bu etiketlerin sayfa sonunda bölünmesini önlemeye çalışır
+    }
+};
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        // İşlem bitince butonları geri getir
+        const lang = localStorage.getItem('selectedLang') || 'tr';
+        buttons.forEach(btn => {
+            if (btn.id === 'btn-en' && lang === 'en') btn.style.display = 'none';
+            else if (btn.id === 'btn-tr' && lang === 'tr') btn.style.display = 'none';
+            else btn.style.display = ''; 
+        });
+    });
 }
+
 
 function toggleDarkMode() {
     const body = document.body;
