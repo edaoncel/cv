@@ -1048,6 +1048,29 @@ body {
     box-sizing: border-box;
 }
 
+.single-qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 150px; 
+}
+
+.single-qr-container img {
+    width: 80px; 
+    height: auto;
+    margin-bottom: 8px;
+}
+
+.lang-view-cv-text {
+    font-size: 8px;       
+    line-height: 1.2;     
+    color: #555;         
+    margin: 0;            
+    font-weight: 600;   
+    text-transform: uppercase;
+}
+
 .profile-photo-desktop {
     width: 120px;
     height: 120px;
